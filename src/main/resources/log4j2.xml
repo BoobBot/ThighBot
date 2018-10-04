@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t] [%-5level] [%-15logger{1}] - %msg%n"/>
+        </Console>
+        <File name="File" fileName="sana.log" immediateFlush="true" append="false">
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t] [%-5level] [%-10logger{1}] - %msg%n"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
