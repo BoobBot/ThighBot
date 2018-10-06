@@ -18,12 +18,17 @@ object ToggleCommand extends BotCommand {
 
   //TODO: Add more to this
   override def execute(context: CommandContext): Unit = {
+    val cm = new ChannelManager(context.message.getTextChannel)
     if (PermissionUtil.checkPermission(context.message.getTextChannel(), context.message.getMember(), Permission.MANAGE_CHANNEL)) {
-      val cm = new ChannelManager(context.message.getTextChannel)
-      cm.setNSFW(true).queue()
-      val embed = new Embed(Color.pink, description = "Toggled channel to NSFW.")
-      embed.send(context.eevent.getTextChannel)
-    } else {
+      if (!context.isNsfw) {
+        cm.setNSFW(true).queue()
+        val embed = new Embed(Color.pink, description = "Toggled channel to NSFW.")
+        embed.send(context.eevent.getTextChannel)
+      } else {
+        cm.setNSFW(false).queue()
+        val embed = new Embed(Color.pink, description = "Toggled channel to SFW.")
+        embed.send(context.eevent.getTextChannel)
+      }
     }
   }
 }

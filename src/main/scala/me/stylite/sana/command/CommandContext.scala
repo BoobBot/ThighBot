@@ -4,6 +4,7 @@ import net.dv8tion.jda.core.entities.{Message, MessageChannel, User}
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
 import net.dv8tion.jda.core.Permission
+import net.dv8tion.jda.core.utils.MiscUtil
 import me.stylite.sana.Sana
 
 class CommandContext(val event: MessageReceivedEvent) {
@@ -17,6 +18,7 @@ class CommandContext(val event: MessageReceivedEvent) {
   val author: User = event.getAuthor
   val guild = event.getGuild
   val test = args: Array[String]
+  val member = event.getMember
 
   val allArgs: Array[String] = message.getContentRaw.split(" ")
   val commandName = allArgs(0).replace(Sana.PREFIX, "")
@@ -64,5 +66,6 @@ class CommandContext(val event: MessageReceivedEvent) {
     }
     builder.toArray
   }
+
 
 }
