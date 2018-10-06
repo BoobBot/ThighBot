@@ -1,6 +1,7 @@
 config.properties
 project/target
 project/project
+lib
 .idea
 target
 sana.log
