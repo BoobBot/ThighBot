@@ -1,71 +1,44 @@
 package me.stylite.sana.command
 
-import net.dv8tion.jda.core.entities.{Message, MessageChannel, User}
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent
-import net.dv8tion.jda.core.hooks.ListenerAdapter
-import net.dv8tion.jda.core.Permission
-import net.dv8tion.jda.core.utils.MiscUtil
+import net.dv8tion.jda.api.entities.{ChannelType, Guild, Member, Message, MessageChannel, TextChannel, User}
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.hooks.ListenerAdapter
+import net.dv8tion.jda.api.{JDA, Permission}
+import net.dv8tion.jda.api.utils.MiscUtil
 import me.stylite.sana.Sana
 
 class CommandContext(val event: MessageReceivedEvent) {
 
-  //Basic stuff that is just from the event
   val channel: MessageChannel = event.getChannel
+  val textChannel: TextChannel = event.getTextChannel
   val message: Message = event.getMessage
-  val eevent = event
-  val isNsfw = event.getTextChannel.isNSFW
-  val rawMessage: String = event.getMessage.getContentRaw
+  val jda: JDA = event.getJDA
+  val isNsfw: Boolean = event.getTextChannel.isNSFW
+  val content: String = event.getMessage.getContentRaw
   val author: User = event.getAuthor
-  val guild = event.getGuild
-  val test = args: Array[String]
-  val member = event.getMember
+  val guild: Guild = event.getGuild
+  val member: Member = event.getMember
 
   val allArgs: Array[String] = message.getContentRaw.split(" ")
-  val commandName = allArgs(0).replace(Sana.PREFIX, "")
-  val commandArgs = allArgs.slice(1, allArgs.length)
+  val commandName: String = allArgs(0).replace(Sana.PREFIX, "")
+  val commandArgs: Array[String] = allArgs.slice(1, allArgs.length)
 
-  //Doing this so that the other args variable won't be in scope
-  val (name, args) = {
-    val rawArgs = rawMessage.split(" ")
-    (rawArgs.head.replace(Sana.PREFIX, ""), rawArgs.tail)
+  def send(content: String): Unit = {
+    message.getChannel.sendMessage(content).queue()
   }
 
-  def Args(start: Int = 0, delim: String = " "): String = {
-    combineArgs(start, commandArgs.length, delim)
-  }
-
-  def AArgs(start: Int = 0): Array[Char] = {
-    combineArgss(start, commandArgs.length)
-  }
-
-  def combineArgs(start: Int, end: Int, delim: String): String = {
-
-    var subArray = commandArgs.slice(start, end)
-    var builder: StringBuilder = new StringBuilder
-
-    for (i <- 0 until subArray.length){
-      builder.append(subArray(i))
-      if (i + 1 < subArray.length){
-        builder.append(" ")
-      }
+  def canRun(user: User, channel: MessageChannel, permissions: Permission): Boolean = {
+    val userChannel = channel.getJDA.getTextChannelById(channel.getIdLong)
+    return if (channel.getType == ChannelType.PRIVATE || user.getIdLong == 366454817373290508L) {
+      true
+    } else {
+      guild.getMember(user).hasPermission(userChannel, permissions)
     }
-    builder.toString
   }
 
-
-  def combineArgss(start: Int, end: Int): Array[Char] = {
-
-    var subArray = commandArgs.slice(start, end)
-    var builder: StringBuilder = new StringBuilder
-
-    for (i <- 0 until subArray.length){
-      builder.append(subArray(i))
-      if (i + 1 < subArray.length){
-        builder.append(" ")
-      }
-    }
-    builder.toArray
+  val args = {
+    val rawArgs = content.split(" ")
+    rawArgs.tail
   }
-
 
 }

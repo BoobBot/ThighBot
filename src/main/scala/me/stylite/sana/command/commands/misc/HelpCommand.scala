@@ -1,28 +1,47 @@
 package me.stylite.sana.command.commands.misc
-
 import java.awt.Color
+import java.util
 
-import me.stylite.sana.command.{BotCommand, CommandContext}
+import me.stylite.sana.command.{BotCommand, CommandContext, CommandManager}
 import me.stylite.sana.util.Embed
+import collection.mutable
 
 object HelpCommand extends BotCommand {
 
   override val name: String = "help"
   override val aliases: Set[String] = Set.empty[String]
-  override val desc: String = "Pong."
+  override val desc: String = "The help command"
+  override val category: String = "Misc"
 
   //TODO: Add more to this
   override def execute(context: CommandContext): Unit = {
-    // context.channel.sendMessage("Pong! " + context.message.getJDA.getPing + "ms").queue()
-    val embed = new Embed(Color.pink, "**tbping**: pong!\n" +
-      "**tbthigh**: Posts a random sexy thigh.\n" +
-      "**tbthighs**: Random thighs as a slideshow.\n" +
-      "**tbtoggle**: Toggles the current channels nsfw setting.\n" +
-      "**tbinvite**: bot, support server and paypal links.\n" + ":link: Links\n" +
-      "<:discord:495677697494876160> Server: https://invite.boob.bot/\n" +
-      "<:bot:495677697448607754> Bot: https://thighs.boob.bot/\n" +
-      ":link: Website: https://boob.bot\n" +
-      "<:paypal:495677697113063425> Paypal: https://paypal.boob.bot/")
-    embed.send(context.eevent.getTextChannel)
+    val commands = CommandManager.commands
+    val commandMap = new mutable.HashMap[String, mutable.Set[String]] with mutable.MultiMap[String, String]
+    commands.map(command => commandMap addBinding (command.category, s"${command.name}"))
+    if (context.args.isEmpty) {
+      val help = new StringBuilder
+      help.append("```ini\n")
+      help.append(s"Help for ${context.jda.getSelfUser.getName}\n\n")
+      val miscCommands = commandMap.get("Misc").toList.head.toString().replace("Set(", "  ").replace(")", "")
+      help.append(s"[Misc]\n")
+      help.append(s"$miscCommands\n")
+      val nsfwCommands = commandMap.get("NSFW").toList.head.toString().replace("Set(", "  ").replace(")", "")
+      help.append("[NSFW]\n")
+      help.append(s"$nsfwCommands\n")
+      help.append("```")
+      context.send(help.toString)
+    } else {
+      val help = new StringBuilder
+      for (command <- commands) {
+        if (command.name == context.args(0)){
+          help.append("```ini\n")
+            .append(s"[${command.name}]\n")
+            .append(s"  Description: ${command.desc}\n")
+            .append(s"  Aliases: ${command.aliases.toString.replace("Set(", "").replace(")", "")}\n")
+            .append("```")
+        }
+      }
+      context.send(help.toString())
+    }
   }
 }
