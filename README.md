@@ -4,13 +4,13 @@
 
 ## Prerequisites
 
-* You will need Intellij
+* You will need an editor of your choice
 * You will need a discord bot Token
 * Java 10
 
 ## Running
 * Clone or download the repo
-* Import project into intellij
+* Import the project 
 * Make changes and PR
 
 ## Built With
