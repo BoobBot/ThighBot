@@ -11,16 +11,18 @@ object ThighCommand extends BotCommand {
 
   override val name: String = "thigh"
   override val aliases: Set[String] = Set.empty[String]
-  override val desc: String = "Posts a sexy thigh.  "
+  override val desc: String = "Posts a sexy thigh."
+  override val category: String = "NSFW"
 
   //TODO: Add more to this
   override def execute(context: CommandContext): Unit = {
     val thigh = ThighApi.getThigh
+    val prefix = Sana.PREFIX
     if(context.isNsfw){
       val embed = new Embed(Color.pink, description= "Sexy thighs", imageUrl= s"$thigh")
-      embed.send(context.eevent.getTextChannel)
+      embed.send(context.textChannel)
     } else {
-      context.channel.sendMessage("This isn't a NSFW Channel. Use `tbtoggle` to turn it into one.").queue()
+      context.send(s"This isn't a NSFW Channel. Use `${prefix}toggle` to turn it into one.")
     }
 
   }

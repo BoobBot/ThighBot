@@ -5,8 +5,7 @@ import java.awt.Color
 import me.stylite.sana.command.{BotCommand, CommandContext}
 import me.stylite.sana.util.Embed
 import com.sun.management.OperatingSystemMXBean
-import net.dv8tion.jda.core.JDA
-import org.json.JSONObject
+import net.dv8tion.jda.api.JDA
 import java.lang.management.ManagementFactory
 import java.text.DecimalFormat
 
@@ -16,7 +15,8 @@ object StatsCommand extends BotCommand {
 
   override val name: String = "stats"
   override val aliases: Set[String] = Set.empty[String]
-  override val desc: String = "Pong."
+  override val desc: String = "Shows stats on the bot"
+  override val category: String = "Misc"
 
   //TODO: Add more to this
   override def execute(context: CommandContext): Unit = {
@@ -26,6 +26,6 @@ object StatsCommand extends BotCommand {
     val shards = Sana.Sana.getShards.size()
 
     val embed = new Embed(Color.pink, s"```" + s"Servers: $servers\n" + s"Users: $users\n" + s"Shards: $shards" + "```")
-    embed.send(context.eevent.getTextChannel)
+    embed.send(context.textChannel)
   }
 }

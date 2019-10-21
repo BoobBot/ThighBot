@@ -5,6 +5,7 @@ abstract class BotCommand() {
   val name: String
   val aliases: Set[String]
   val desc: String
+  val category: String
 
   def execute(commandContext: CommandContext): Unit
 

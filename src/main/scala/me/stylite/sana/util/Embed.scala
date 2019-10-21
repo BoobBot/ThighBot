@@ -3,8 +3,8 @@ package me.stylite.sana.util
 import java.awt.Color
 import java.util.concurrent.TimeUnit
 
-import net.dv8tion.jda.core.EmbedBuilder
-import net.dv8tion.jda.core.entities.{Message, MessageEmbed, TextChannel}
+import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.entities.{Message, MessageEmbed, TextChannel}
 
 import scala.collection.JavaConverters._
 
